@@ -1,19 +1,51 @@
-from django import forms
-from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User, Group
+from django.shortcuts import render, redirect
+
+from authorization.forms import RegisterUserForm, LoginUserForm
 
 
-class RegisterUserForm(forms.Form):
-    login = forms.CharField(max_length=20)
-    password = forms.CharField(max_length=30, widget=forms.PasswordInput())
-    email = forms.EmailField()
+def register_view(request):
 
-    def clean_login(self):
-        login = self.cleaned_data['login']
-        if User.objects.filter(username=login).exists():
-            raise ValidationError('User with this username already exists.')
-        return login
-    
-class LoginUserForm(forms.Form):
-    login = forms.CharField(max_length=20)
-    password = forms.CharField(max_length=30, widget=forms.PasswordInput())
+    form = RegisterUserForm(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            user = User.objects.create_user(
+                form.cleaned_data['login'],
+                form.cleaned_data['email'],
+                form.cleaned_data['password']
+            )
+            user.save()
+            group = Group.objects.get(name='users')  # must be created before used, create through django admin
+            user.groups.add(group)
+            messages.add_message(request, messages.SUCCESS, f"Welcome {form.cleaned_data['login']}!!")
+
+    return render(
+        request,
+        'authorization/register.html',
+        context={'form': form}
+    )
+
+def login_view(request):
+
+    form = LoginUserForm(request.POST)
+    if request.method == 'POST':
+        if form.is_valid():
+            user_login = form.cleaned_data['login']
+            user = authenticate(username=user_login, password=form.cleaned_data['password'])
+            if user:
+                login(request, user)
+                messages.add_message(request, messages.SUCCESS, f'Successfully logged in {user_login}!')
+
+    return render (
+        request,
+        'authorization/login.html',
+        context={'form': form}
+    )
+
+
+def logout_view(request):
+    logout(request)
+
+    return redirect(login_view)

@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from django.test import Client
 from django.urls import reverse
-from rest_framework.test import force_authenticate, APIClient, APIRequestFactory
+from rest_framework.test import APIClient
 
 from budget.models import Transaction, Account
 
@@ -47,12 +47,21 @@ class AccountTest(TestCase):
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 403)
 
-    def set_up(self):
-        user1 = User.objects.create_user(
-            username="admin123",
-            password="admin123")
+    # def set_up(self):
+    #     user1 = User.objects.create_user(
+    #         username="admin123",
+    #         password="admin123")
+    #
+    # def test_login(self):
+    #     client = APIClient()
+    #     user = client.force_authenticate(user="admin123")
+    #     self.assertIsNone(user, None)
 
-    def test_login(self):
-        client = APIClient()
-        user = client.force_authenticate(user="admin123")
-        self.assertIsNone(user, None)
+class TransactionTest(TestCase):
+
+    def create(self, account="Clothes", amount=1000, date="2020-09-26"):
+        return Transaction.objects.create(account=account, amount=amount, date=date)
+
+    def test_transation_creation(self):
+        t = self.create()
+        self.assertTrue(isinstance(t, Transaction))

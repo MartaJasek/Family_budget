@@ -17,3 +17,4 @@ class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=False)
     amount = models.PositiveIntegerField()
     date = models.DateField()
+

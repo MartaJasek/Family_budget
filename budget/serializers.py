@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from budget.models import Account, Transaction, CATEGORY_CHOICES
+from budget.models import Account, Transaction, Owner, CATEGORY_CHOICES
 
 
 class AccountsSerializer(serializers.ModelSerializer):
@@ -16,6 +16,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     account = serializers.CharField(max_length=32)
     amount = serializers.IntegerField()
     date = serializers.DateField()
+    owner = serializers.CharField(max_length=50)
 
     class Meta:
         model = Transaction

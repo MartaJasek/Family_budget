@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.views.generic import CreateView
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAdminUser, AllowAny
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin
 
@@ -53,10 +53,10 @@ class AccountsView(GenericViewSet, ListModelMixin, CreateModelMixin, UpdateModel
 class TransactionsView(GenericViewSet, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
 
     def list(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
+        queryset = self.get_queryset().filter(owner=request.user)
 
         page = self.paginate_queryset(queryset)
         if page is not None:
@@ -90,6 +90,3 @@ class TransactionsView(GenericViewSet, ListModelMixin, CreateModelMixin, UpdateM
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class UserView(CreateView):
-    model = User
-    fields = ('user_login', 'first_name', 'last_name', 'email_address')

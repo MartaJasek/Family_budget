@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User, Group
 from django.shortcuts import render, redirect
 
+
 from authorization.forms import RegisterUserForm, LoginUserForm
 
 
@@ -23,7 +24,7 @@ def register_view(request):
 
     return render(
         request,
-        'authorization/register.html',
+        '/authorization/register.html',
         context={'form': form}
     )
 
@@ -40,7 +41,7 @@ def login_view(request):
 
     return render (
         request,
-        'authorization/login.html',
+        '/authorization/login.html',
         context={'form': form}
     )
 

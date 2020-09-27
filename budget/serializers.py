@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from budget.models import Account, Transaction, Owner, CATEGORY_CHOICES
+from budget.models import Account, Transaction, CATEGORY_CHOICES
 
 
 class AccountsSerializer(serializers.ModelSerializer):

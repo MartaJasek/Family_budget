@@ -7,7 +7,6 @@ from rest_framework.mixins import ListModelMixin, CreateModelMixin, UpdateModelM
 from budget.models import Account, Transaction
 from budget.serializers import AccountsSerializer, TransactionSerializer
 
-
 class AccountsView(GenericViewSet, ListModelMixin, CreateModelMixin, UpdateModelMixin, DestroyModelMixin):
     queryset = Account.objects.all()
     serializer_class = AccountsSerializer
@@ -88,7 +87,4 @@ class TransactionsView(GenericViewSet, ListModelMixin, CreateModelMixin, UpdateM
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-class OwnerView(GenericViewSet):
-    pass
 

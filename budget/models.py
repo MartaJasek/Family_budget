@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 CATEGORY_CHOICES = (
@@ -13,15 +14,9 @@ class Account(models.Model):
     def __str__(self):
         return self.account
 
-class Owner(models.Model):
-    owner_login = models.CharField(max_length=50, unique=True)
-    owner_email = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.owner_login
 
 class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=False)
     amount = models.PositiveIntegerField()
     date = models.DateField()
-    owner = models.ForeignKey(Owner, on_delete=models.CASCADE, null=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, null=False)

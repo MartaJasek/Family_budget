@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.views.generic import CreateView
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
@@ -88,3 +90,6 @@ class TransactionsView(GenericViewSet, ListModelMixin, CreateModelMixin, UpdateM
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class UserView(CreateView):
+    model = User
+    fields = ('user_login', 'first_name', 'last_name', 'email_address')

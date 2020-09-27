@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'budget',
     'authorization',
     'rest_framework',
-    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -131,5 +130,3 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
     ]
 }
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
